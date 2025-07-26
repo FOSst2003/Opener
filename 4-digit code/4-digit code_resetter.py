@@ -1,18 +1,21 @@
-# 3-digit_code_resetter.py
 import ctypes
 import time
 import json
 import os
+import sys
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-CONFIG_FILE_PATH = os.path.join(script_dir, "config_3.json")
+
+if len(sys.argv) > 1:
+    CONFIG_FILE_PATH = sys.argv[1]
+else:
+    CONFIG_FILE_PATH = os.path.join(script_dir, "config_4.json")
 
 user32 = ctypes.WinDLL('user32', use_last_error=True)
 SCANCODE_F = 0x21
 SCANCODE_BACKSPACE = 0x0E
 KEYEVENTF_KEYUP = 0x0002
 
-# Предполагается, что механизм вращения такой же, как и для 4-значного
 DIGIT_HOLD = {
     0: 6.20, 1: 1.35, 2: 2.00, 3: 2.50, 4: 3.00,
     5: 3.55, 6: 4.00, 7: 4.60, 8: 5.15, 9: 5.65,
@@ -55,7 +58,7 @@ def load_config():
         config['current_code'] = [int(d) for d in config['current_code']]
         return config
     except FileNotFoundError:
-        print(f"[Ошибка] config_3.json не найден.")
+        print(f"[Ошибка] Конфигурационный файл не найден: {CONFIG_FILE_PATH}")
         return None
     except Exception as e:
         print(f"[Ошибка] Загрузка конфига: {e}")
@@ -80,8 +83,8 @@ def reset_code():
         return
 
     length = config["length"]
-    if length != 3:
-        print("[Ошибка] Поддерживаются только 3-значные коды.")
+    if length != 4:
+        print("[Ошибка] Этот скрипт поддерживает только 4-значные коды.")
         input("Нажмите Enter для выхода...")
         return
 
@@ -106,7 +109,7 @@ def reset_code():
             print("[Готово] Система возвращена в начальное положение.")
     else:
         print(f"[Сброс] {''.join(map(str, current_code))} → {''.join(map(str, start_code))}")
-        for i in range(length): # 0, 1, 2 для 3-значного
+        for i in range(length):  # 0, 1, 2, 3
             if current_code[i] != start_code[i]:
                 delta = (i - current_slot + length) % length
                 if delta != 0:
