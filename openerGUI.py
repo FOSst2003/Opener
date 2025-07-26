@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import (
     QButtonGroup, QProgressBar, QTextEdit
 )
 from PyQt5.QtCore import Qt, QProcess
-
+os.system("chcp 65001 >nul")
 
 class CodeConfigurator(QWidget):
     def __init__(self):

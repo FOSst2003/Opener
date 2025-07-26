@@ -108,12 +108,12 @@ def reset_code():
             switch_slot(delta)
             print("[Готово] Система возвращена в начальное положение.")
     else:
-        print(f"[Сброс] {''.join(map(str, current_code))} → {''.join(map(str, start_code))}")
+        print(f"[Сброс] {''.join(map(str, current_code))} -> {''.join(map(str, start_code))}")
         for i in range(length):  # 0, 1, 2, 3
             if current_code[i] != start_code[i]:
                 delta = (i - current_slot + length) % length
                 if delta != 0:
-                    print(f"[Слот] {current_slot} → {i}: {delta}x[F]")
+                    print(f"[Слот] {current_slot} -> {i}: {delta}x[F]")
                     switch_slot(delta)
                     time.sleep(SLOT_SWITCH_DELAY)
                     current_slot = i
@@ -121,11 +121,10 @@ def reset_code():
                 target_digit = start_code[i]
                 rotations = (target_digit - current_digit + 10) % 10
                 if rotations != 0:
-                    print(f"[Цифра] Слот {i}: {current_digit} → {target_digit} ({rotations} оборотов)")
+                    print(f"[Цифра] Слот {i}: {current_digit} -> {target_digit} ({rotations} оборотов)")
                     set_digit(rotations)
                     current_code[i] = target_digit
 
-        # Возврат в слот 0 после сброса
         final_slot = 0
         delta = (final_slot - current_slot + length) % length
         if delta != 0:
